@@ -11,11 +11,11 @@ namespace Domain.Models.UserIdentityModels
         /// <summary>
         /// Username for authorization
         /// </summary>
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         /// <summary>
         /// Username for authorization
         /// </summary>
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 }

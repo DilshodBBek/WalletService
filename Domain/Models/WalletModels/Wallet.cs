@@ -23,6 +23,6 @@ namespace Domain.Models.WalletModels
         /// User for E-Wallet
         /// </summary>
         [Column("User")]
-        public IdentityUser User { get; set; }
+        public IdentityUser? User { get; set; }
     }
 }

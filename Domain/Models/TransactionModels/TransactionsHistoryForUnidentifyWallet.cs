@@ -3,12 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.TransactionModels
 {
-    public class TransactionsHistoryForUnidentifyWalletransactionsHistory
+    public class TransactionsHistoryForUnidentifyWallet : TransactionsHistory
     {
         /// <summary>
         /// Unidentify E-Wallet Id
         /// </summary>
-        [Column("UnidentifyWalletId")]
-        public UnidentifyWallet UnidentifyWalletId { get; set; }
+        [Column("UnidentifyWallet")]
+        [ForeignKey("UnidentifyWalletFK")]
+
+        public UnidentifyWallet UnidentifyWallet { get; set; }
     }
 }
