@@ -7,12 +7,12 @@ namespace WalletService.Controllers
 {
     [ApiController]
     [Route("User")]
-    public class AccountController : Controller
+    public class UserController : Controller
     {
         public UserManager<IdentityUser> _userManager { get; set; }
         public SignInManager<IdentityUser> _signInManager { get; set; }
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService)
+        public UserController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
