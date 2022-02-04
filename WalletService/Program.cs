@@ -4,6 +4,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PostgresInfrastructure;
+using WalletService.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,11 @@ builder.Services.AddDbContext<WalletDbContext>(dbContextOption => dbContextOptio
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<WalletDbContext>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.OperationFilter<AddRequiredHeaderParameter>();
+    
+});
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 

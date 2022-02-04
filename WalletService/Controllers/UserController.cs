@@ -1,4 +1,5 @@
 ﻿using Domain.Models.UserIdentityModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PostgresInfrastructure.Interfaces;
@@ -43,6 +44,7 @@ namespace WalletService.Controllers
             return Ok();
         }
 
+        [Authorize] //Only use after Login or Register which signed in the system
         [HttpPost("/logout")]
         public async Task<IActionResult> Logout([FromBody] Credentials credentials)
         {
@@ -50,6 +52,7 @@ namespace WalletService.Controllers
             return Ok();
         }
 
+        [Authorize] //Only use after Login or Register which signed in the system
         [HttpDelete("/delete")]
         public async Task<IActionResult> Delete([FromBody] string UserId)
         {
