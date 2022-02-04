@@ -1,13 +1,9 @@
-﻿using Domain.Models.WalletModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Models.TransactionModels;
 
 namespace PostgresInfrastructure.Interfaces
 {
-    public interface IUnidentifyWalletService: IWalletService
+    public interface IUnidentifyWalletService : IWalletService
     {
+        public List<TransactionsHistoryForUnidentifyWallet> GetStatistics(string UserId, DateTime startDate, DateTime endDate);
     }
 }

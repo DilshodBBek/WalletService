@@ -9,8 +9,6 @@ namespace Domain.Models.WalletModels
     public class WalletServiceModel
     {
         public Wallet Wallet { get; set; }
-        //public string ErrorMessage { get; set; }
-        //public int StatusCode { get; set; }
-        public HttpResponseMessage httpResponse { get; set; }
+        public HttpResponseMessage HttpResponse { get; set; }
     }
 }

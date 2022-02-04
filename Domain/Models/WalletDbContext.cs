@@ -1,5 +1,6 @@
 ﻿using Domain.Models.TransactionModels;
-using Domain.Models.WalletModels;
+using Domain.Models.WalletModels.IdentifyWalletModels;
+using Domain.Models.WalletModels.UnidentifyWalletModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

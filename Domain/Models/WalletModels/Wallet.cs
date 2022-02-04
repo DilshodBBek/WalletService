@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Domain.Models.WalletModels
 {
@@ -23,6 +24,7 @@ namespace Domain.Models.WalletModels
         /// User for E-Wallet
         /// </summary>
         [Column("User")]
-        public IdentityUser? User { get; set; }
+        [JsonIgnore]
+        public IdentityUser User { get; set; }
     }
 }

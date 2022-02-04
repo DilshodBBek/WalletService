@@ -11,12 +11,16 @@ namespace WalletService.Controllers
     public class UserController : Controller
     {
         public UserManager<IdentityUser> _userManager { get; set; }
+        public readonly IIdentifyWalletService _identifyWalletService;
+        public readonly IUnidentifyWalletService _unidentifyWalletService;
         public SignInManager<IdentityUser> _signInManager { get; set; }
 
-        public UserController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService)
+        public UserController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService, IUnidentifyWalletService unidentifyWalletService, IIdentifyWalletService identifyWalletService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _unidentifyWalletService = unidentifyWalletService;
+            _identifyWalletService = identifyWalletService;
         }
 
         [HttpPost("/register")]
@@ -44,7 +48,7 @@ namespace WalletService.Controllers
             return Ok();
         }
 
-        [Authorize] //Only use after Login or Register which signed in the system
+        //[Authorize] //Only use after Login or Register which signed in the system
         [HttpPost("/logout")]
         public async Task<IActionResult> Logout()
         {
@@ -52,7 +56,7 @@ namespace WalletService.Controllers
             return Ok();
         }
 
-        [Authorize] //Only use after Login or Register which signed in the system
+        //[Authorize] //Only use after Login or Register which signed in the system
         [HttpDelete("/delete")]
         public async Task<IActionResult> Delete([FromBody] UserRemove _user)
         {
@@ -64,6 +68,11 @@ namespace WalletService.Controllers
             if (user == null)
             {
                 return NotFound(_user.UserId + " -> UserId not found");
+            }
+
+            if (_identifyWalletService.IsWalletExist(_user.UserId)||_unidentifyWalletService.IsWalletExist(_user.UserId))
+            {
+                return BadRequest("This user have Wallet please remove wallet before delete user!");
             }
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)

@@ -1,4 +1,4 @@
-﻿using Domain.Models.WalletModels;
+﻿using Domain.Models.WalletModels.UnidentifyWalletModels;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.TransactionModels

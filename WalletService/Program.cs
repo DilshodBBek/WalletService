@@ -22,7 +22,6 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<AddRequiredHeaderParameter>();
     
 });
-
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 // Register services directly with Autofac here. Don't
@@ -40,8 +39,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
 
+app.UseHttpsRedirection();
+app.Use(async (context, next) => {
+    context.Request.EnableBuffering();
+    await next();
+});
 app.UseAuthorization();
 app.MapControllers();
 
