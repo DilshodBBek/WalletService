@@ -46,7 +46,7 @@ namespace WalletService.Controllers
 
         [Authorize] //Only use after Login or Register which signed in the system
         [HttpPost("/logout")]
-        public async Task<IActionResult> Logout([FromBody] Credentials credentials)
+        public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return Ok();
@@ -54,16 +54,16 @@ namespace WalletService.Controllers
 
         [Authorize] //Only use after Login or Register which signed in the system
         [HttpDelete("/delete")]
-        public async Task<IActionResult> Delete([FromBody] string UserId)
+        public async Task<IActionResult> Delete([FromBody] UserRemove _user)
         {
-            if (string.IsNullOrEmpty(UserId))
+            if (string.IsNullOrEmpty(_user.UserId))
             {
                 return BadRequest("UserId cannot be null or empty");
             }
-            IdentityUser user = _userManager.FindByIdAsync(UserId).Result;
+            IdentityUser user = _userManager.FindByIdAsync(_user.UserId).Result;
             if (user == null)
             {
-                return NotFound(UserId + " -> UserId not found");
+                return NotFound(_user.UserId + " -> UserId not found");
             }
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
