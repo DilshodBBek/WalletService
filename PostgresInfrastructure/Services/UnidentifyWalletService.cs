@@ -2,7 +2,9 @@
 using Domain.Models.TransactionModels;
 using Domain.Models.WalletModels;
 using Domain.Models.WalletModels.UnidentifyWalletModels;
+using Domain.States;
 using PostgresInfrastructure.Interfaces;
+using System.Net;
 
 namespace PostgresInfrastructure.Services
 {
@@ -14,7 +16,7 @@ namespace PostgresInfrastructure.Services
         {
             HttpResponse = new HttpResponseMessage()
             {
-                StatusCode = System.Net.HttpStatusCode.OK
+                StatusCode = HttpStatusCode.OK
             }
         };
         public UnidentifyWalletService(WalletDbContext walletDb)
@@ -65,8 +67,7 @@ namespace PostgresInfrastructure.Services
                 var user = string.IsNullOrEmpty(userId) ? null : _walletDb.Users.FirstOrDefault(x => x.Id.Equals(userId));
                 if (user == null)
                 {
-                    Result.HttpResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
-                    Result.HttpResponse.ReasonPhrase = "User not found";
+                    SetResult(HttpStatusCode.NotFound, "User not found");
                     return Result;
                 }
                 UnidentifyWallet wallet = new UnidentifyWallet()
@@ -76,7 +77,7 @@ namespace PostgresInfrastructure.Services
                 };
                 _walletDb.UnidentifyWallets.Add(wallet as UnidentifyWallet);
                 _walletDb.SaveChanges();
-                Result.Wallet = wallet;
+                SetResult(HttpStatusCode.OK, "", wallet);
                 return Result;
             }
             catch (Exception)
@@ -98,7 +99,8 @@ namespace PostgresInfrastructure.Services
                 var wallet = CheckWalletWithUserId(userId, id);
                 if (wallet == null)
                     return Result;
-                Result.Wallet = wallet;
+
+                SetResult(HttpStatusCode.OK, "", wallet);
                 return Result;
             }
             catch (Exception)
@@ -114,8 +116,7 @@ namespace PostgresInfrastructure.Services
         /// <returns></returns>
         public bool IsWalletExist(string userId)
         {
-            var b= _walletDb.UnidentifyWallets.FirstOrDefault(x => x.User.Id.Equals(userId)) != null;
-            return b;
+            return _walletDb.UnidentifyWallets.FirstOrDefault(x => x.User.Id.Equals(userId)) != null;
         }
 
         /// <summary>
@@ -134,6 +135,7 @@ namespace PostgresInfrastructure.Services
 
                 _walletDb.UnidentifyWallets.Remove(wallet);
                 _walletDb.SaveChanges();
+                SetResult();
                 return Result;
             }
             catch (Exception)
@@ -157,8 +159,7 @@ namespace PostgresInfrastructure.Services
                 var unidentifyWallet = _walletDb.UnidentifyWallets.FirstOrDefault(x => x.Id.Equals(walletId));
                 if (unidentifyWallet == null)
                 {
-                    Result.HttpResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
-                    Result.HttpResponse.ReasonPhrase = "Wallet not found";
+                    SetResult(HttpStatusCode.NotFound, "Wallet not found");
                     return Result;
                 }
                 unidentifyWallet.AmountOfMoney += amount;
@@ -168,10 +169,11 @@ namespace PostgresInfrastructure.Services
                     {
                         SenderUser = username,
                         TransactionAmount = amount,
-                        TransactionDate = DateTime.Now,
+                        TransactionDate = DateTime.UtcNow,
                         UnidentifyWallet = unidentifyWallet
                     });
                 _walletDb.SaveChanges();
+                SetResult();
                 return Result;
             }
             catch (Exception)
@@ -186,8 +188,7 @@ namespace PostgresInfrastructure.Services
             var wallet = _walletDb.UnidentifyWallets.FirstOrDefault(x => x.Id.Equals(Id) && x.User.Id.Equals(userId));
             if (wallet == null)
             {
-                Result.HttpResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
-                Result.HttpResponse.ReasonPhrase = "Unidentify Wallet not found";
+                SetResult(HttpStatusCode.NotFound, "Unidentify Wallet not found");
                 return null;
             }
             return wallet;
@@ -195,13 +196,16 @@ namespace PostgresInfrastructure.Services
 
         private bool IsHighUnidentifyWalletAmount(int amount)
         {
-            if (amount > 10000)
+            if (amount >= 10000)
             {
-                Result.HttpResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                Result.HttpResponse.ReasonPhrase = "Unidentify Wallet money amount cannot be higher than 10.000";
+                SetResult(HttpStatusCode.BadRequest, "Unidentify Wallet money amount cannot be higher than 10.000");
                 return true;
             }
             return false;
+        }
+        private void SetResult(HttpStatusCode statusCode = HttpStatusCode.OK, string message = "", Wallet wallet = null)
+        {
+            Result = Result.SetResultValue(statusCode, message, wallet);
         }
     }
 }

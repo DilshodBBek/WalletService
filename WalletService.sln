@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletService", "WalletServ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{4AE69A6E-4997-4E1A-81C7-667900E4CFAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostgresInfrastructure", "PostgresInfrastructure\PostgresInfrastructure.csproj", "{84C7F142-DE27-4A72-B665-1F99D220C5AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostgresInfrastructure", "PostgresInfrastructure\PostgresInfrastructure.csproj", "{84C7F142-DE27-4A72-B665-1F99D220C5AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InstructionFile", "InstructionFile", "{DAD17260-C81D-4223-9955-7C414352FCEB}"
+	ProjectSection(SolutionItems) = preProject
+		Instruction.txt = Instruction.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

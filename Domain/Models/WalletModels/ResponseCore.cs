@@ -17,5 +17,8 @@ namespace Domain.Models.WalletModels
 
         [JsonProperty("result")]
         public T? Result { get; set; }
+
+        [JsonProperty("statusCode")]
+        public int StatusCode { get; set; } = 200;
     }
 }
